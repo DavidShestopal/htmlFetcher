@@ -1,9 +1,40 @@
 const express = require("express");
 const app = express();
+const knex = require("./db-config");
 const port = 3000;
+const { databaseChecker } = require("./services/tasksService");
 
-app.get("/", function (req, res) {
-  res.send(`HTML Fetcher Running On Port ${port} `);
+setInterval(databaseChecker, 5000);
+
+app.use(express.json());
+
+app.get("/urls", async (req, res) => {
+  const tasks = await knex("tasks");
+
+  res.json({ tasks });
+});
+
+app.get("/urls/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const task = await knex("tasks").where({ id }).first();
+    res.json({ task });
+  } catch {
+    res.sendStatus(404);
+  }
+});
+
+app.post("/urls", async (req, res) => {
+  const url = req.body.url;
+  const createdTask = await knex("tasks").insert({ url }).returning("*");
+  console.log(createdTask);
+  res.json({ createdTask });
+});
+
+app.delete("/urls/:id", async (req, res) => {
+  const id = req.params.id;
+  await knex("tasks").where({ id }).delete();
+  res.sendStatus(204);
 });
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
