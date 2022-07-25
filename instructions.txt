@@ -1,0 +1,83 @@
+html website scraper 
+
+you are given a url 
+from that url you are supposed to get that particular page's full html 
+
+on the home page there should be an input for the url
+there should also be a button to start the process
+
+once you have submitted the url it gets added to the list of urls that you have already ran before
+on the right side there should be a status badge with the status on the completion of the set request such as "pending, completed, and failed"
+
+if the request has been completed you are able to view the html code for that particular website that you searched from
+
+all of this needs to be stored in a database
+
+
+tech stack
+
+Client:
+
+React.js Front End
+Material UI Desgin Libary 
+
+
+Backend: 
+
+Node.js
+Express Nodemon
+Postgress
+Docker
+
+Database Schema
+
+url table: saves all the urls that have been inputed into the database previously
+url html table: for each url a table that stores all the html and also a status 
+
+
+
+tasks table:
+
+columns :
+url 
+html 
+id
+status
+
+POST
+
+htmlfetcher.com/urls
+
+{
+
+url: "./some url" required
+
+
+
+}
+
+GET
+
+htmlfetcher.com/urls
+
+[{
+id: url id
+url: url website name
+status:  status for each url whether succefully fetched
+
+}]
+
+
+htmlfetcher.com/urls/1
+
+{
+
+id: url id
+html:  website's html
+status: status for each url whether succefully fetched
+}
+
+DELETE
+
+htmlfetcher.com/urls/{id}
+
