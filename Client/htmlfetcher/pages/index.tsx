@@ -13,8 +13,8 @@ import Typography from "@mui/material/Typography";
 import PendingIcon from "@mui/icons-material/Pending";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import Link from "next/link";
 
-import TaskModal from "./components/taskmodal";
 export type Task = {
   id: number;
   url: string;
@@ -25,7 +25,6 @@ export type Task = {
 const Home: NextPage = () => {
   const [tasks, setTasks] = useState<Array<Task>>([]);
   const [userInput, setUserInput] = useState<string>("");
-  console.log(userInput);
 
   function apiCall() {
     axios
@@ -101,7 +100,7 @@ const Home: NextPage = () => {
               <ListItemText sx={{ whiteSpace: "nowrap", overflow: "hidden" }}>
                 {task.url}
               </ListItemText>
-              <TaskModal task={task} />
+              <Link href={`/urls/${task.id}`}>website details</Link>
             </ListItem>
           ))}
         </List>
