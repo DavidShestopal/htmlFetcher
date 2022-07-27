@@ -1,12 +1,14 @@
 const express = require("express");
 const app = express();
 const knex = require("./db-config");
+var cors = require("cors");
 const port = 3000;
 const { databaseChecker } = require("./services/tasksService");
 
 setInterval(databaseChecker, 5000);
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/urls", async (req, res) => {
   const tasks = await knex("tasks");
