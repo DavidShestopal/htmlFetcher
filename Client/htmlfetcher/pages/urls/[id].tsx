@@ -2,23 +2,23 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Task } from "..";
+import { InferGetServerSidePropsType } from "next";
 
-const HtmlDetails = () => {
-  const router = useRouter();
-  const { id } = router.query;
+import { GetServerSideProps } from "next";
 
-  const [task, setTask] = useState<Task | undefined>(undefined);
-  console.log(task);
+export const getServerSideProps: GetServerSideProps<{ task: Task }> = async (
+  context
+) => {
+  const { id } = context.params as { id: string };
+  const response = await axios.get(`http://localhost:3000/urls/${id}`);
+  const { task } = response.data;
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/urls/${id}`)
-      .then((response) => setTask(response.data.task));
-  }, [id]);
+  return { props: { task } };
+};
 
-  if (!task) {
-    return null;
-  }
+const HtmlDetails = ({
+  task,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <>
       <p>{task.url}</p>

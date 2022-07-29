@@ -14,6 +14,7 @@ import PendingIcon from "@mui/icons-material/Pending";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
 
 export type Task = {
   id: number;
@@ -22,8 +23,17 @@ export type Task = {
   html: string;
 };
 
-const Home: NextPage = () => {
-  const [tasks, setTasks] = useState<Array<Task>>([]);
+export const getServerSideProps: GetServerSideProps<{
+  task: Task;
+}> = async () => {
+  const response = await axios.get(`http://localhost:3000/urls/`);
+  const { tasks } = response.data;
+
+  return { props: { tasks } };
+};
+
+const Home: NextPage = ({ tasks: serverTasks }) => {
+  const [tasks, setTasks] = useState<Array<Task>>(serverTasks);
   const [userInput, setUserInput] = useState<string>("");
 
   function apiCall() {
@@ -33,7 +43,6 @@ const Home: NextPage = () => {
   }
 
   useEffect(() => {
-    apiCall();
     setInterval(apiCall, 5000);
   }, []);
 
